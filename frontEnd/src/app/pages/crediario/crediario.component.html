@@ -1,0 +1,195 @@
+<div class="card" *ngIf="showTable">
+  <div class="card-header">
+    <div class="title-page">
+      {{'LISTCREDIARIO' | translate}}
+    </div>   
+      <h2>
+        Contas Ativas : {{contasAtivas}}
+      </h2>
+    <br>
+  </div>
+  <div class="card-body">
+    <div class="col-md-4 search-content">
+      <div class="d-flex align-items-center">
+        <input class="form-control border-0 no-bg fw-300 search-input" [(ngModel)]="searchText" type="text" placeholder="{{'SEARCHCREDIARIO' | translate}}">
+        <i class="material-icons icon-adjust">search</i>
+      </div>
+    </div>
+    <button type="button" class="btn btn-success mr-1 mb-1 btn-register" (click)="register()">
+      {{'BUTTONNEW' | translate}}
+    </button>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>
+              {{'CODIGO' | translate}}
+            </th>
+            <th>
+              {{'PERSON' | translate}}
+            </th>
+            <th>
+              {{'USER' | translate}}
+            </th>
+            <th>
+              {{'SALES' | translate}}
+            </th>
+            <th>
+              {{'ENABLE_CREDIARIO' | translate}}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of (crediario  | searchList : searchText)">
+            <td>
+              {{c.id}}
+            </td>
+            <td>
+              {{c.person_id}}
+            </td>
+            <td>
+              {{c.user_id}}
+            </td>
+            <td>
+              {{c.sales != null ? c.sales.length : null}}
+            </td>
+            <td>
+              {{c.enable_crediario}}
+            </td>
+            <td class="has-tex-centered">
+              <button type="button" class="btn btn-info btn-icon mr-1 mb-1" (click)="update(c.id)">
+                <i class="icon ion-ios-upload"></i>
+                <span>{{'BUTTONEDIT' | translate}}</span>
+              </button>
+              <button type="button" class="btn btn-danger btn-icon mr-1 mb-1" (click)="openModalDelete(c)">
+                <i class="icon ion-ios-close"></i>
+                <span>{{'BUTTONDISABLE' | translate}}</span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="card" *ngIf="isRegister">
+  <div class="card-header title-page">
+    {{'REGISTERCREDIARIO' | translate}}
+  </div>
+  <div class="card-body">
+    <div class="panel-body">
+      <form [formGroup]="crediarioForm">
+        <div class="row person-content ">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header card-titles title-sub-menu">
+                {{'PERSON' | translate}}
+              </div>
+              <div class="card-body">
+                <div class="form-group col-xs-6">
+                  <input id="typeahead-http" type="text" formControlName="person_id" class="form-control" [class.is-invalid]="searchFailed"
+                    [(ngModel)]="selectedSearchPerson" [ngbTypeahead]="searchPerson" [inputFormatter]="formatterPerson" placeholder="{{'SEARCHPERSON' | translate}}"
+                    [resultFormatter]="formatterPerson" />
+                  <small class="text-danger" *ngIf="crediarioForm.controls['person_id'].hasError('required') && crediarioForm.controls['person_id'].touched">
+                    {{'PERSONREQUIRED' | translate}}
+                  </small>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header card-titles title-sub-menu">
+                {{'USER' | translate}}
+              </div>
+              <div class="card-body">
+                <div class="form-group col-xs-6">
+                  <input id="typeahead-http" type="text" formControlName="user_id" class="form-control" [class.is-invalid]="searchFailed" [(ngModel)]="selectedSearchUser"
+                    [ngbTypeahead]="searchUser" [inputFormatter]="fomatterUser" placeholder="Procure um usuário.." [resultFormatter]="fomatterUser"
+                  />
+                  <small class="text-danger" *ngIf="crediarioForm.controls['user_id'].hasError('required') && crediarioForm.controls['user_id'].touched">
+                    {{'USERREQUIRED' | translate}}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <label class="custom-control custom-checkbox">
+            <label class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" [(ngModel)]="crediarioData.enable_crediario" formControlName="enable_crediario">
+              <span class="custom-control-label"></span>
+              <span class="custom-control-description">{{'ENABLE_CREDIARIO' | translate}}</span>
+            </label>
+          </label>
+        </div>
+
+
+        <div class="card">
+          <div class="card-header card-titles">
+            <div class="title-sub-menu">{{'SALES' | translate}}</div>
+            <div class="btn-add-tec">
+              <button type="button" class="btn btn-primary btn-add" (click)="addSale()" placement="top" ngbTooltip="{{'ADDSALE' | translate}}">
+                <i class="material-icons">
+                  add
+                </i>
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div formArrayName="sales">
+              <div *ngFor="let tech of crediarioForm.controls.sales.controls; let i=index" class="panel panel-default">
+                <div class="modal-heading">
+                  <span class="heading">{{'SALES' | translate}} {{i + 1}}</span>
+                  <button class="btn btn-danger btn-icon-icon mr-1 mb-1 btn-remove" style="float: right;" (click)="removeSale(i)" *ngIf="crediarioForm.controls.sales.controls.length > 1"  placement="top"
+                    ngbTooltip="Excluir venda">
+                    <i class="material-icons icon-remove">close</i>
+                  </button>
+                </div>
+                <div class="panel-body" [formGroupName]="i">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <input type="text" class="form-control" formControlName="value" placeholder="Digite o valor">
+                      <small [hidden]="crediarioForm.controls.sales.controls[i].controls.value.valid" class="text-danger">
+                        {{'VALUEREQUIRED' | translate}}
+                      </small>
+                    </div>
+                    <div class="col-md-3">
+                      <input type="text" class="form-control" formControlName="purchase_date" placeholder="Data do Pagamento: 00/00/0000">
+                      <small [hidden]="crediarioForm.controls.sales.controls[i].controls.purchase_date.valid" class="text-danger">
+                        {{'PURCHASEDATE' | translate}}
+                      </small>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="custom-control custom-checkbox">
+                        <label class="custom-control custom-checkbox">
+                          <input type="checkbox" class="custom-control-input" formControlName="enable_sale">
+                          <span class="custom-control-label"></span>
+                          <span class="custom-control-description">{{'ENABLE_SALE' | translate}}</span>
+                        </label>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <br>
+        <div class="btn-footer">
+          <button type="button" class="btn btn-warning white" (click)="hidenForm()">{{'CANCEL' | translate}}</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!crediarioForm.valid" (click)="validContinue()">{{'SEND' | translate}}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="card-body alert alert-success" role="alert" *ngIf="msgSucess || msgSucessPut">
+    <h3 class="alert alert-success" *ngIf="msgSucessPut === true">{{'UPDATESUCESS' | translate}}</h3>
+    <h3 class="alert alert-sucess" *ngIf="msgSucess === true">{{'REGISTERSUCESS' | translate}}</h3>
+</div>

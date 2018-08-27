@@ -1,0 +1,64 @@
+.btn-register {
+    float: right;
+}
+
+.title-page {
+    text-align: center;
+    padding-top: 10px;
+    font-size: 22px;
+    text-transform: uppercase;
+}
+
+.icon-adjust {
+    margin-left: -25px;
+}
+
+.search-content {
+    float: left;
+    padding-bottom: 15px;
+}
+
+.search-input {
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+}
+
+.person-content {
+    padding-bottom: 20px;
+}
+
+.btn-remove {
+    width: 49px;
+    height: 40px;
+    margin-top: 20px;
+}
+
+.icon-remove {
+    padding-top: 1px;
+}
+
+.title-sub-menu {
+    float: left;
+    font-weight: bold;
+}
+
+.btn-add-tec {
+    float: right;
+}
+
+.btn-add {
+    width: 49px;
+    height: 37px;
+    margin-right: 4px;
+}
+
+.btn-footer {
+    float: right;
+}
+
+.white {
+    color: #fff !important;
+}
+
+.modal-heading {
+    margin-bottom: 7px;
+}

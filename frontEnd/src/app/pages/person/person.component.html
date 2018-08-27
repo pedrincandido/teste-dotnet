@@ -1,0 +1,110 @@
+<div class="card" *ngIf="showTable">
+  <div class="card-header">
+    <div class="title-page">
+      {{'LISTPERSON' | translate}}
+    </div>
+    <br>
+  </div>
+  <div class="card-body">
+    <div class="col-md-4 search-content">
+      <div class="d-flex align-items-center">
+        <input class="form-control border-0 no-bg fw-300 search-input" [(ngModel)]="searchText" type="text" placeholder="{{'SEARCHPERSON' | translate}}">
+        <i class="material-icons icon-adjust">search</i>
+      </div>
+    </div>
+    <button type="button" class="btn btn-success mr-1 mb-1 btn-register" (click)="register()">
+      {{'BUTTONNEW' | translate}}
+    </button>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>
+              {{'CODIGO' | translate}}
+            </th>
+            <th>
+              {{'NAME' | translate}}
+            </th>
+            <th colspan="2"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of (person | searchList: searchText)">
+            <td>
+              {{p.id}}
+            </td>
+            <td>
+              {{p.name}}
+            </td>
+            <td class="has-tex-centered">
+              <button type="button" class="btn btn-info btn-icon mr-1 mb-1" (click)="update(p.id)">
+                <i class="icon ion-ios-upload"></i>
+                <span>{{'BUTTONEDIT' | translate}}</span>
+              </button>
+              <button type="button" class="btn btn-danger btn-icon mr-1 mb-1" (click)="openModalDelete(p)">
+                <i class="icon ion-ios-close"></i>
+                <span>{{'BUTTONDELET' | translate}}</span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="card" *ngIf="isRegister">
+  <div class="card-header">
+    {{'NEWREGISTERPERSON' | translate}}
+  </div>
+  <div class="card-body">
+    <div class="panel-body">
+      <form [formGroup]="personForm">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-grofup">
+              <label for="exampleFormControlInput1">{{'NAME' | translate}}</label>
+              <input type="text" class="form-control" [(ngModel)]="personData.name" formControlName="nome" required>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="exampleFormControlInput1">{{'CPF' | translate}}</label>
+              <input type="text" class="form-control" [(ngModel)]="personData.cpf" formControlName="cpf" required>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="exampleFormControlInput1">{{'BIRTHDATE' | translate}}</label>
+              <input type="text" class="form-control" [(ngModel)]="personData.birth_date" formControlName="dataNascimento" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label>{{'SELECTGENDER' | translate}}</label>
+              <select class="form-control" formControlName="sexo" [(ngModel)]="personData.gender_id">
+                <option [value]="1">Masculino</option>
+                <option [value]="2">Feminino</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+
+        <br>
+        <div class="btn-footer">
+          <button type="button" class="btn btn-warning white" (click)="hidenForm()">{{'CANCEL' | translate}}</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!personForm.valid" (click)="saveOrUpdateData()">{{'SEND' | translate}}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="card-body alert alert-success" role="alert" *ngIf="msgSucess || msgSucessPut">
+    <h3 class="alert alert-success" *ngIf="msgSucessPut === true">{{'UPDATESUCESS' | translate}}</h3>
+    <h3 class="alert alert-sucess" *ngIf="msgSucess === true">{{'REGISTERSUCESS' | translate}}</h3>
+</div>
