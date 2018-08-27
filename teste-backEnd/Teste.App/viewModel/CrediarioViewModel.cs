@@ -30,6 +30,6 @@ namespace Teste.App.viewModel
         public Boolean EnableCrediario { get; set; }
 
         [DataMember(Name = "sales")]
-        public virtual List<SaleViewModel> Sales { get; set; }
+        public virtual IEnumerable<SaleViewModel> Sales { get; set; }
     }
 }

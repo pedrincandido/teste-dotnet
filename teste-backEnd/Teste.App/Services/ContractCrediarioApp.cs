@@ -22,33 +22,28 @@ namespace Teste.App.Services
             _appPerson = appPerson;
         }
 
-        public virtual List<CrediarioViewModel> GetAll()
+        public virtual IEnumerable<CrediarioViewModel> GetAll()
         {
             var sales = _appSale.GetAll(null);
 
             var crediarios = _rep.GetAll(null);
 
-            
-            var result = (from cre in crediarios
-                              //from y in sales.Where(s => s.CreadiarioId == cre.Id).DefaultIfEmpty()
-                          join y in sales on cre.Id equals y.CreadiarioId
-                          select new CrediarioViewModel
-                          {
-                              Id = cre.Id,
-                              PersonId = cre.PersonId,
-                              UserId = cre.UserId,
-                              Sales = y == null ? null : new List<SaleViewModel>
-                              {
-                                  new SaleViewModel
-                                  {
-                                      Id = y.Id,
-                                      Value = y.Value,
-                                      PurchaseDate = y.PurchaseDate,
-                                      EnableSale = y.EnableSale,
-                                      CreadiarioId = y.CreadiarioId.Value
-                                  }
-                              }
-                          }).ToList();
+            var result = (
+                from x in crediarios
+                select new CrediarioViewModel
+                {
+                    Id = x.Id,
+                    PersonId = x.PersonId,
+                    UserId = x.UserId,
+                    Sales = x.Sales?.Select(s => new SaleViewModel
+                    {
+                        Id = s.Id,
+                        Value = s.Value,
+                        PurchaseDate = s.PurchaseDate,
+                        EnableSale = s.EnableSale,
+                        CreadiarioId = s.CreadiarioId.Value
+                    })
+                });
 
             return result;
         }
@@ -119,18 +114,18 @@ namespace Teste.App.Services
         {
             try
             {
-                List<Sale> sale = new List<Sale>();
-                for (int i = 0; i < view.Sales.Count(); i++)
-                {
-                    sale.Add(new Sale
-                    {
-                        Id = (int)view.Sales[i]?.Id.Value,
-                        CreadiarioId = (int)view?.Sales[i]?.CreadiarioId,
-                        EnableSale = view.Sales[i].EnableSale,
-                        PurchaseDate = view.Sales[i].PurchaseDate,
-                        Value   = view.Sales[i].Value
-                    });
-                }
+                //List<Sale> sale = new List<Sale>();
+                //for (int i = 0; i < view.Sales.Count(); i++)
+                //{
+                //    sale.Add(new Sale
+                //    {
+                //        Id = (int)view.Sales[i]?.Id.Value,
+                //        CreadiarioId = (int)view?.Sales[i]?.CreadiarioId,
+                //        EnableSale = view.Sales[i].EnableSale,
+                //        PurchaseDate = view.Sales[i].PurchaseDate,
+                //        Value   = view.Sales[i].Value
+                //    });
+                //}
          
                 Crediario crediario = _rep.Get(view.Id.Value);
 

@@ -31,7 +31,7 @@ namespace Teste.API.Controllers
         [HttpGet]
         [Produces(typeof(List<Crediario>))]
         [Route("/crediario")]
-        public List<CrediarioViewModel> Get([FromQuery]string nome, [FromServices] ContractCrediarioApp contractCrediarioApp)
+        public IEnumerable<CrediarioViewModel> Get([FromQuery]string nome, [FromServices] ContractCrediarioApp contractCrediarioApp)
         {
             try
             {

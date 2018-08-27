@@ -25,6 +25,13 @@ namespace Teste.Impl.Configuration
 
             entity.HasOne<User>(e => e.User).WithMany()
            .HasForeignKey(e => e.UserId).OnDelete(DeleteBehavior.Restrict);
+
+
+            //entity.HasMany<Sale>(s => s.Sales)
+            //    .WithOne(ad => ad.Crediario)
+            //    .HasForeignKey(x => x.CreadiarioId);
+
+
         }
     }
 }

@@ -20,7 +20,11 @@ namespace Teste.Impl.Configuration
             entity.Property(e => e.EnableSale).HasColumnName("ENABLE_SALE").IsRequired();
             entity.Property(e => e.CreadiarioId).HasColumnName("CREDIARIO_ID").IsRequired(false);
 
-            entity.HasOne<Crediario>(x => x.Crediario).WithMany(x => x.Sales).HasConstraintName("FK_SALE_CREDIARIO_CREDIARIO_ID").HasForeignKey(x => x.CreadiarioId);
+            entity.HasOne(x => x.Crediario)
+                .WithMany(x => x.Sales)
+                //.HasConstraintName("FK_SALE_CREDIARIO_CREDIARIO_ID")
+                .HasForeignKey(x => x.CreadiarioId);
+
         }
     }
 }
